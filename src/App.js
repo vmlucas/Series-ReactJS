@@ -87,7 +87,13 @@ const fetchbyApp = async (e)=>{
 
   const renderCad = () => {
     if (cad) {
-      return <form onSubmit={saveSerie} ><table>
+      return <form onSubmit={saveSerie} ><table align='center'>
+        <tr>
+          <td colSpan={2} className="title2">
+            <font size='6'>
+          Inserir nova série</font>
+          </td>
+        </tr>    
          <tr>
           <td>Year</td>
           <td><input type="text" name="Year"></input></td>
@@ -127,7 +133,7 @@ const fetchbyApp = async (e)=>{
 
   const renderSeries =() => {
     if( search ){
-     return <table>
+     return <table align='center'>
         <tr>
             <td>Ano</td>
             <td>Serie</td>
@@ -153,7 +159,7 @@ const fetchbyApp = async (e)=>{
 
   const renderSaved =() => {
     if( saved ){
-     return <table>
+     return <table align='center'>
         <tr>
             <td>Nova Série Salva</td>
         </tr>
@@ -173,8 +179,19 @@ const fetchbyApp = async (e)=>{
 */
   return (
     <div className="App-header">
-        <h3>Dados de Séries</h3><img src={logo} className="App-logo" alt="logo" />
-        <table width={500}>     
+        <table width={500} align='center'>  
+            <tr align='center'>
+              <td className='title'><font size='8'>
+                 Dados de Séries</font>
+              </td>
+            </tr>
+            <tr align='center'>
+              <td>
+              <img src={logo} className="App-logo" alt="logo" />
+              </td>
+            </tr>             
+        </table>
+        <table width={500} align='center'>     
             <tr>
                <td>
                  <input type="text" name="BuscaNome" id="BuscaNome" onKeyPress={fetchbyName} placeholder="Busca por Nome">
@@ -196,7 +213,13 @@ const fetchbyApp = async (e)=>{
                </td>
             </tr>
         </table> 
-        <hr></hr>
+        <table align='center'>
+          <tr>
+            <td>
+              <hr></hr>
+            </td>
+          </tr>
+        </table>
         {renderCad()}         
         {renderSeries()}  
         {renderSaved()}    

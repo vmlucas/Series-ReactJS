@@ -43,7 +43,7 @@
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
-  display: flex;
+  display:flexbox;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -63,8 +63,14 @@
     transform: rotate(360deg);
   }
 }
-h3 {
+.title {
   color: var(--belize-hole);
+  font: 30px;
+}
+
+.title2 {
+  color: var(--concrete);
+  font: 20px, bold;
 }
 
 input, textarea, button {
@@ -75,6 +81,8 @@ input, textarea, button {
   font-size: 13px;
   padding: 10px;
   margin-bottom: 10px;
+  background: var(--midnight-blue);
+  color: white;
 }
 
 select {
@@ -84,6 +92,8 @@ select {
   font: 14px 'Lato', sans-serif;
   padding: 10px;
   margin-bottom: 10px;
+  background: var(--midnight-blue);
+  color: white;
 }
 
 .inputClass {
@@ -128,7 +138,8 @@ table td {
 
 button {
   width: auto;
-  background: var(--silver);
+  background: var(--midnight-blue);
+  color: white;
   cursor: pointer;
   white-space: nowrap;
 }
