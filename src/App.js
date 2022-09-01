@@ -166,6 +166,11 @@ const fetchbyApp = async (e)=>{
         </table>;    
     }
   } 
+
+  const openInNewTab = url => {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+  
   /*const fetchNames = async () => {
     const data = await axios.get('/names')
     const {names} = data.data
@@ -210,6 +215,11 @@ const fetchbyApp = async (e)=>{
                </td>
                <td>
                <button name='Cadastro' onClick={clickcad} width='20'>Inserir </button>
+               </td>
+               <td>
+               <button onClick={() => openInNewTab('https://charts.mongodb.com/charts-project-0-ohubx/public/dashboards/827a5078-c6d3-4f90-ac13-3cf1a875d2ab')}>
+                 Dashboard
+               </button>
                </td>
             </tr>
         </table> 
