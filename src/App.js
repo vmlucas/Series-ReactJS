@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import React,{useState,useEffect} from "react";
+import React,{useState,useEffect, Fragment} from "react";
 import axios from "axios"
 import {format} from "date-fns"
 
@@ -11,6 +11,15 @@ function App() {
   const [search,setSearch] = useState("");  
   const [saved,setSaved] = useState("");  
 
+  //variables for edit
+  const [year,setYear] = useState("");  
+  const [name,setName] = useState("");  
+  const [season,setSeason] = useState("");   
+  const [prov,setProv] = useState("");  
+  const [app,setAPP] = useState("");   
+  const [status,setStatus] = useState(""); 
+  const [text,setText] = useState(""); 
+  
   const clickcad = async (e)=>{
       e.preventDefault();
       setCad(true)
@@ -20,26 +29,45 @@ function App() {
 
   const saveSerie = async (e)=>{
      e.preventDefault();
-     const year = e.target.Year.value
-     const name = e.target.seriesName.value
-     const season = e.target.Season.value
-     const prov = e.target.Provider.value
-     const app = e.target.App.value
-     const status = e.target.Status.value
+     const yearSave = e.target.Year.value
+     const nameSave = e.target.seriesName.value
+     const seasonSave = e.target.Season.value
+     const provSave = e.target.Provider.value
+     const appSave = e.target.App.value
+     const statusSave = e.target.Status.value
      
      const serie = {
-             "Year" : parseInt(year),
-             "SeriesName" : name,
-             "Season": season,
-             "Provider" : prov,
-             "App" : app,
-             "Status" : status
+             "Year" : parseInt(yearSave),
+             "SeriesName" : nameSave,
+             "Season": seasonSave,
+             "Provider" : provSave,
+             "App" : appSave,
+             "Status" : statusSave
       }
      const data = await axios.post('https://victor-mongodbapi.herokuapp.com/Series/insert',serie)
      setCad(false)
      setSearch(false)
      setSaved(true)
   }
+  
+  const updateSerie = async ({d}) => {
+    //e.preventDefault();
+    const serie = {
+            "id" : d.id, 
+            "Year" : year==''?d.Year:parseInt(year),
+            "SeriesName" : name==''?d.SeriesName:name,
+            "Season": season==''?d.Season:season,
+            "Provider" : prov==''?d.Provider:prov,
+            "App" : app==''?d.App:app,
+            "Status" : status==''?d.Status:status,
+     }
+    console.log(serie) 
+    const data = await axios.post('https://victor-mongodbapi.herokuapp.com/Series/update',serie)
+    setText(data.data)
+    setCad(false)
+    setSearch(false)
+    setSaved(true)
+  }  
 
   const fetchbyName = async (e)=>{
     if (e.which == 13) {
@@ -120,6 +148,7 @@ const fetchbyApp = async (e)=>{
             <option value='Watched'>Watched</option>
             <option value='Watching'>Watching</option>
             <option value='Waiting'>Waiting</option>
+            <option value='Abandoned'>Abandoned</option>
         </select></td>
         </tr>
         <tr>
@@ -139,32 +168,72 @@ const fetchbyApp = async (e)=>{
             <td>Serie</td>
             <td>Temporada</td>
             <td>App</td>
+            <td>Provider</td>
             <td>Status</td>
+            <td></td>
         </tr>
           {seriesList.map(serie => {
-              return (
-                <tr>
-                  <td>{serie.Year}</td>
-                  <td>{serie.SeriesName}</td>
-                  <td>{serie.Season}</td>
-                  <td>{serie.App}</td>
-                  <td>{serie.Status} 
-                 <input type="hidden" id="idStatus" value="{serie.id}"></input></td>
+              return ( <tr>
+                  <td><input type="text" name="Year" placeholder={serie.Year} onChange={(event) => setYear(event.target.value)}></input></td>
+                  <td><input type="text" name="seriesName" placeholder={serie.SeriesName} onChange={(event) => setName(event.target.value)}></input></td>
+                  <td><input type="text" name="Season" placeholder={serie.Season} onChange={(event) => setSeason(event.target.value)}></input></td>
+                  <td><input type="text" name="App" placeholder={serie.App} onChange={(event) => setAPP(event.target.value)}></input></td>
+                  <td><input type="text" name="Provider" placeholder={serie.Provider} onChange={(event) => setProv(event.target.value)}></input></td>
+                  <td><select name='Status' onChange={(event) => setStatus(event.target.value)}>
+                        {renderOptions({s:serie.Status})}
+                       </select></td>
+                  <td>
+                  <button name='update' 
+                     onClick={() => updateSerie({d: serie})}
+                     width='20'>Atualizar </button>
+                  </td>                  
                 </tr>
+                //</form>
               )
           })}
         </table>;    
     }
   } 
 
-  const renderSaved =() => {
+  const renderEdited =() => {
     if( saved ){
      return <table align='center'>
         <tr>
-            <td>Nova Série Salva</td>
+            <td>{text}</td>
         </tr>
         </table>;    
     }
+  } 
+
+  const renderOptions =({s}) => {
+    if( s == 'Watched')
+    return <Fragment>
+        <option value='Watched' selected>Watched</option>
+        <option value='Watching'>Watching</option>
+        <option value='Waiting'>Waiting</option>
+        <option value='Abandoned'>Abandoned</option>
+    </Fragment>;
+    else if( s == 'Watching')
+    return <Fragment>
+        <option value='Watched' >Watched</option>
+        <option value='Watching' selected>Watching</option>
+        <option value='Waiting'>Waiting</option>
+        <option value='Abandoned'>Abandoned</option>
+    </Fragment>;
+    else if( s == 'Waiting')
+    return <Fragment>
+        <option value='Watched' >Watched</option>
+        <option value='Watching' >Watching</option>
+        <option value='Waiting' selected>Waiting</option>
+        <option value='Abandoned'>Abandoned</option>
+    </Fragment>;
+    else 
+    return <Fragment>
+        <option value='Watched' >Watched</option>
+        <option value='Watching' >Watching</option>
+        <option value='Waiting' >Waiting</option>
+        <option value='Abandoned' selected>Abandoned</option>
+    </Fragment>;
   } 
 
   const openInNewTab = url => {
@@ -184,7 +253,7 @@ const fetchbyApp = async (e)=>{
 */
   return (
     <div className="App-header">
-        <table width={500} align='center'>  
+        <table align='center' >  
             <tr align='center'>
               <td className='title'><font size='8'>
                  Dados de Séries</font>
@@ -196,7 +265,7 @@ const fetchbyApp = async (e)=>{
               </td>
             </tr>             
         </table>
-        <table width={500} align='center'>     
+        <table align='center'>     
             <tr>
                <td>
                  <input type="text" name="BuscaNome" id="BuscaNome" onKeyPress={fetchbyName} placeholder="Busca por Nome">
@@ -205,12 +274,13 @@ const fetchbyApp = async (e)=>{
                <td>
                 <input type="text" name="BuscaApp" id="BuscaApp" onKeyPress={fetchbyApp} placeholder="Busca por App"></input>
               </td>
-               <td width={120}>Busca por Status</td>
+               <td >Busca por Status</td>
                <td>  <select id='BuscaStatus' name='BuscaStatus' onChange={fetchbyStatus}>
                               <option value=''></option>
                                   <option value='Watched'>Watched</option>
                                   <option value='Watching'>Watching</option>
                                   <option value='Waiting'>Waiting</option>
+                                  <option value='Abandoned'>Abandoned</option>
                   </select>              
                </td>
                <td>
@@ -223,8 +293,8 @@ const fetchbyApp = async (e)=>{
                </td>
             </tr>
         </table> 
-        <table align='center'>
-          <tr>
+        <table align='center' >
+          <tr >
             <td>
               <hr></hr>
             </td>
@@ -232,7 +302,7 @@ const fetchbyApp = async (e)=>{
         </table>
         {renderCad()}         
         {renderSeries()}  
-        {renderSaved()}    
+        {renderEdited()}    
     </div>
   );
 }
