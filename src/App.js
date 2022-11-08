@@ -44,7 +44,7 @@ function App() {
              "App" : appSave,
              "Status" : statusSave
       }
-     const data = await axios.post('https://victor-mongodbapi.herokuapp.com/Series/insert',serie)
+     const data = await axios.post('https://home-mongodbapi.azurewebsites.net/Series/insert',serie)
      setCad(false)
      setSearch(false)
      setSaved(true)
@@ -54,15 +54,15 @@ function App() {
     //e.preventDefault();
     const serie = {
             "id" : d.id, 
-            "Year" : year==''?d.Year:parseInt(year),
-            "SeriesName" : name==''?d.SeriesName:name,
-            "Season": season==''?d.Season:season,
-            "Provider" : prov==''?d.Provider:prov,
-            "App" : app==''?d.App:app,
-            "Status" : status==''?d.Status:status,
+            "Year" : year===''?d.Year:parseInt(year),
+            "SeriesName" : name===''?d.SeriesName:name,
+            "Season": season===''?d.Season:season,
+            "Provider" : prov===''?d.Provider:prov,
+            "App" : app===''?d.App:app,
+            "Status" : status===''?d.Status:status,
      }
     console.log(serie) 
-    const data = await axios.post('https://victor-mongodbapi.herokuapp.com/Series/update',serie)
+    const data = await axios.post('https://home-mongodbapi.azurewebsites.net/Series/update',serie)
     setText(data.data)
     setCad(false)
     setSearch(false)
@@ -70,14 +70,14 @@ function App() {
   }  
 
   const fetchbyName = async (e)=>{
-    if (e.which == 13) {
+    if (e.which === 13) {
       e.preventDefault();
       setCad(false)
       setSearch(true)
       setSaved(false)
       var name = e.target.value;
       console.log(name)
-      const data = await axios.get('https://victor-mongodbapi.herokuapp.com/Series/find?name='+name+'&app=&status=')
+      const data = await axios.get('https://home-mongodbapi.azurewebsites.net/Series/find?name='+name+'&app=&status=')
       const {series} = data.data
       setSeriesList(series);
       console.log(data)
@@ -85,14 +85,14 @@ function App() {
 }
 
 const fetchbyApp = async (e)=>{
-  if (e.which == 13) {
+  if (e.which === 13) {
     e.preventDefault();
     setCad(false)
     setSearch(true)
     setSaved(false)
     var app = e.target.value;
     console.log(app)
-    const data = await axios.get('https://victor-mongodbapi.herokuapp.com/Series/find?name=&app='+app+'&status=')
+    const data = await axios.get('https://home-mongodbapi.azurewebsites.net/Series/find?name=&app='+app+'&status=')
     const {series} = data.data
     setSeriesList(series);
     console.log(data)
@@ -106,7 +106,7 @@ const fetchbyApp = async (e)=>{
        setSaved(false)
        var status = e.target.value;
        console.log(status)
-       const data = await axios.get('https://victor-mongodbapi.herokuapp.com/Series/find?name=&app=&status='+status)
+       const data = await axios.get('https://home-mongodbapi.azurewebsites.net/Series/find?name=&app=&status='+status)
        const {series} = data.data
        setSeriesList(series);
        console.log(data)
@@ -206,21 +206,21 @@ const fetchbyApp = async (e)=>{
   } 
 
   const renderOptions =({s}) => {
-    if( s == 'Watched')
+    if( s === 'Watched')
     return <Fragment>
         <option value='Watched' selected>Watched</option>
         <option value='Watching'>Watching</option>
         <option value='Waiting'>Waiting</option>
         <option value='Abandoned'>Abandoned</option>
     </Fragment>;
-    else if( s == 'Watching')
+    else if( s === 'Watching')
     return <Fragment>
         <option value='Watched' >Watched</option>
         <option value='Watching' selected>Watching</option>
         <option value='Waiting'>Waiting</option>
         <option value='Abandoned'>Abandoned</option>
     </Fragment>;
-    else if( s == 'Waiting')
+    else if( s === 'Waiting')
     return <Fragment>
         <option value='Watched' >Watched</option>
         <option value='Watching' >Watching</option>
